@@ -1,0 +1,21 @@
+{
+    "name": "danielhe4rt/kick-php-sdk",
+    "type": "library",
+    "require": {
+        "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
+        "symfony/http-foundation": "^7.2"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Danielhe4rt\\KickSDK\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "danielhe4rt",
+            "email": "danielhe4rt@gmail.com"
+        }
+    ]
+}
