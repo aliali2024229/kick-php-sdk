@@ -1,6 +1,7 @@
 {
     "name": "danielhe4rt/kick-php-sdk",
     "type": "library",
+    "version": "1.0.0",
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.9",
