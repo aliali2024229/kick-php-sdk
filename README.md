@@ -75,6 +75,7 @@ echo "Authenticated User Email: " . ($authenticatedUser->email ?? 'Not provided.
 ```
 
 > See [examples](examples.php) for more usage examples.
+> We also will be providing a Webhook handler soon. 
 
 ## Roadmap
 
