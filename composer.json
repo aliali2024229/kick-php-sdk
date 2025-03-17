@@ -10,7 +10,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Danielhe4rt\\KickSDK\\": "src/"
+            "DanielHe4rt\\KickSDK\\": "src/"
         }
     },
 

@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\Users\Entities\KickUserEntity;
+use DanielHe4rt\KickSDK\Users\Entities\KickUserEntity;
 
 test('can create KickUserEntity with constructor with email', function () {
     $entity = new KickUserEntity(
@@ -34,7 +34,7 @@ test('can create KickUserEntity from array with email', function () {
         'user_id' => 123,
         'name' => 'testuser',
         'profile_picture' => 'https://example.com/profile.jpg',
-        'email' => 'test@example.com'
+        'email' => 'test@example.com',
     ];
 
     $entity = KickUserEntity::fromArray($data);
@@ -49,7 +49,7 @@ test('can create KickUserEntity from array without email', function () {
     $data = [
         'user_id' => 123,
         'name' => 'testuser',
-        'profile_picture' => 'https://example.com/profile.jpg'
+        'profile_picture' => 'https://example.com/profile.jpg',
     ];
 
     $entity = KickUserEntity::fromArray($data);
@@ -74,7 +74,7 @@ test('can serialize KickUserEntity with email', function () {
         'user_id' => 123,
         'name' => 'testuser',
         'profile_picture' => 'https://example.com/profile.jpg',
-        'email' => 'test@example.com'
+        'email' => 'test@example.com',
     ]);
 });
 
@@ -91,6 +91,6 @@ test('can serialize KickUserEntity without email', function () {
         'user_id' => 123,
         'name' => 'testuser',
         'profile_picture' => 'https://example.com/profile.jpg',
-        'email' => null
+        'email' => null,
     ]);
-}); 
+});

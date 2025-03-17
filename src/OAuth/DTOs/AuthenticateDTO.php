@@ -1,6 +1,6 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\DTOs;
+namespace DanielHe4rt\KickSDK\OAuth\DTOs;
 
 readonly class AuthenticateDTO
 {
@@ -8,9 +8,7 @@ readonly class AuthenticateDTO
         public string $code,
         public string $codeVerifier,
         public ?string $redirectUri = null,
-    )
-    {
-    }
+    ) {}
 
     public static function make(string $code, string $codeVerifier, string $redirectUrl): self
     {

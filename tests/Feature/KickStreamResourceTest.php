@@ -1,18 +1,17 @@
 <?php
 
-use Danielhe4rt\KickSDK\Streams\DTOs\UpdateChannelDTO;
-use Danielhe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
-use Danielhe4rt\KickSDK\Streams\Entities\KickChannelEntity;
-use Danielhe4rt\KickSDK\Streams\Entities\KickStreamEntity;
-use Danielhe4rt\KickSDK\Streams\KickStreamResource;
-use Danielhe4rt\KickSDK\Streams\KickStreamException;
+use DanielHe4rt\KickSDK\Streams\DTOs\UpdateChannelDTO;
+use DanielHe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickChannelEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickStreamEntity;
+use DanielHe4rt\KickSDK\Streams\KickStreamException;
+use DanielHe4rt\KickSDK\Streams\KickStreamResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 
 test('can i get my channel', function () {
     // Mock response data
@@ -38,7 +37,7 @@ test('can i get my channel', function () {
                     'viewer_count' => 1000,
                 ],
                 'stream_title' => 'Test Stream',
-            ]
+            ],
         ],
         'message' => 'Success',
     ];
@@ -96,7 +95,7 @@ test('can get channel by id', function () {
                     'viewer_count' => 1000,
                 ],
                 'stream_title' => 'Test Stream',
-            ]
+            ],
         ],
         'message' => 'Success',
     ];
@@ -144,7 +143,7 @@ test('throws exception when channel not found', function () {
 
     // Expect exception
     $this->expectException(KickStreamException::class);
-    
+
     // Call the method
     $resource->getChannelById(999999);
 });
@@ -156,7 +155,7 @@ test('throws exception on API error', function () {
             'Server Error',
             new Request('GET', 'test'),
             new Response(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, [], json_encode(['error' => 'Server error'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -167,7 +166,7 @@ test('throws exception on API error', function () {
 
     // Expect exception
     $this->expectException(KickStreamException::class);
-    
+
     // Call the method
     $resource->getChannelById(123456);
 });
@@ -179,11 +178,11 @@ test('throws exception when missing required scope', function () {
             'Unauthorized',
             new Request('GET', 'test'),
             new Response(
-                HttpResponse::HTTP_UNAUTHORIZED, 
-                [], 
+                HttpResponse::HTTP_UNAUTHORIZED,
+                [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -194,10 +193,10 @@ test('throws exception when missing required scope', function () {
 
     // Expect exception
     $this->expectException(KickStreamException::class);
-    
+
     // The exception message should contain information about missing scope
     $this->expectExceptionMessage('Access denied. You may be missing the required scope');
-    
+
     // Call the method
     $resource->getChannelById(123456);
 });
@@ -291,7 +290,7 @@ test('throws exception when no channels found in multiple request', function () 
 
     // Expect exception
     $this->expectException(KickStreamException::class);
-    
+
     // Call the method
     $resource->getChannelsById([999999, 888888]);
 });
@@ -328,11 +327,11 @@ test('throws exception when updating channel with missing scope', function () {
             'Unauthorized',
             new Request('PATCH', 'test'),
             new Response(
-                HttpResponse::HTTP_UNAUTHORIZED, 
-                [], 
+                HttpResponse::HTTP_UNAUTHORIZED,
+                [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -350,7 +349,7 @@ test('throws exception when updating channel with missing scope', function () {
     // Expect exception
     $this->expectException(KickStreamException::class);
     $this->expectExceptionMessage('Access denied. You may be missing the required scope');
-    
+
     // Call the method
     $resource->updateChannel($updateChannelDTO);
 });
@@ -362,11 +361,11 @@ test('throws exception when channel not found during update', function () {
             'Not Found',
             new Request('PATCH', 'test'),
             new Response(
-                HttpResponse::HTTP_NOT_FOUND, 
-                [], 
+                HttpResponse::HTTP_NOT_FOUND,
+                [],
                 json_encode(['data' => [], 'message' => 'Channel not found'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -383,7 +382,7 @@ test('throws exception when channel not found during update', function () {
 
     // Expect exception
     $this->expectException(KickStreamException::class);
-    
+
     // Call the method
     $resource->updateChannel($updateChannelDTO);
-}); 
+});

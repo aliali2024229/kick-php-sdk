@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\Chat\KickChatException;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Chat\KickChatException;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 
 test('can create message send failed exception', function () {
     $exception = new \Exception('Test error message', 500);
@@ -38,4 +38,4 @@ test('can create forbidden exception', function () {
         ->and($chatException->getMessage())->toContain('[Kick Forbidden]')
         ->and($chatException->getMessage())->toContain('You do not have permission to send messages to this channel.')
         ->and($chatException->getCode())->toBe(403);
-}); 
+});

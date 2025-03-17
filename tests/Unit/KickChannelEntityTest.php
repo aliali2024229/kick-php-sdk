@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
-use Danielhe4rt\KickSDK\Streams\Entities\KickChannelEntity;
-use Danielhe4rt\KickSDK\Streams\Entities\KickStreamEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickChannelEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickStreamEntity;
 
 test('can create KickChannelEntity with constructor', function () {
     $category = new KickCategoryEntity(
@@ -91,7 +91,7 @@ test('can create KickChannelEntity from array with stream', function () {
 
     // Mock the var_dump function to prevent output during tests
     $this->expectOutputString('');
-    
+
     $entity = KickChannelEntity::fromArray($data);
 
     expect($entity->banner_picture)->toBe('https://example.com/banner.jpg')
@@ -121,7 +121,7 @@ test('can create KickChannelEntity from array without stream', function () {
 
     // Mock the var_dump function to prevent output during tests
     $this->expectOutputString('');
-    
+
     $entity = KickChannelEntity::fromArray($data);
 
     expect($entity->banner_picture)->toBe('https://example.com/banner.jpg')
@@ -218,4 +218,4 @@ test('can serialize KickChannelEntity without stream', function () {
         'stream' => null,
         'stream_title' => 'Test Stream',
     ]);
-}); 
+});

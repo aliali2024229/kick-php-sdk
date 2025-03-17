@@ -25,7 +25,7 @@ composer require danielhe4rt/kick-php-sdk
 ## Usage
 
 ```php
-use Danielhe4rt\KickSDK\KickClient;
+use DanielHe4rt\KickSDK\KickClient;
 
 $clientId = 'your-client-id';
 $clientSecret = 'your-client-secret';

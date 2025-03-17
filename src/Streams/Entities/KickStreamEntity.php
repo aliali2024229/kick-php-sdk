@@ -1,6 +1,6 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Streams\Entities;
+namespace DanielHe4rt\KickSDK\Streams\Entities;
 
 use JsonSerializable;
 
@@ -14,9 +14,7 @@ readonly class KickStreamEntity implements JsonSerializable
         public string $start_time,
         public string $url,
         public int $viewer_count,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -43,4 +41,4 @@ readonly class KickStreamEntity implements JsonSerializable
             'viewer_count' => $this->viewer_count,
         ];
     }
-} 
+}

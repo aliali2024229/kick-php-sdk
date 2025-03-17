@@ -1,48 +1,37 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\DTOs;
+namespace DanielHe4rt\KickSDK\OAuth\DTOs;
 
-use Danielhe4rt\KickSDK\OAuth\Entities\CodeVerifierEntity;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthException;
+use DanielHe4rt\KickSDK\OAuth\Entities\CodeVerifierEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthException;
 use JsonSerializable;
 
 readonly class RedirectUrlDTO implements JsonSerializable
 {
-
     /**
-     * @param string $clientId
-     * @param string $redirectUri
-     * @param string $responseType
-     * @param KickOAuthScopesEnum[] $scopes
-     * @param string $state
-     * @param CodeVerifierEntity $codeChallenge
+     * @param  KickOAuthScopesEnum[]  $scopes
      */
     public function __construct(
-        public string             $clientId,
-        public string             $redirectUri,
-        public string             $responseType,
-        public array              $scopes,
-        public string             $state,
+        public string $clientId,
+        public string $redirectUri,
+        public string $responseType,
+        public array $scopes,
+        public string $state,
         public CodeVerifierEntity $codeChallenge,
-    )
-    {
-
-    }
-
+    ) {}
 
     public static function make(
         string $clientId,
         string $redirectUri,
         string $responseType,
-        array  $scopes,
+        array $scopes,
         string $state,
-    ): self
-    {
+    ): self {
         // Validate the scopes
 
         foreach ($scopes as $scope) {
-            if (!$scope instanceof KickOAuthScopesEnum) {
+            if (! $scope instanceof KickOAuthScopesEnum) {
                 throw KickOAuthException::invalidScope($scope);
             }
         }
@@ -57,7 +46,6 @@ readonly class RedirectUrlDTO implements JsonSerializable
         );
     }
 
-
     public function jsonSerialize(): array
     {
         return [
@@ -67,7 +55,7 @@ readonly class RedirectUrlDTO implements JsonSerializable
             'state' => $this->state,
             'code_challenge' => $this->codeChallenge->getCode(),
             'code_challenge_method' => 'S256',
-            'scope' => implode(' ', array_map(static fn(KickOAuthScopesEnum $scope) => $scope->value, $this->scopes)),
+            'scope' => implode(' ', array_map(static fn (KickOAuthScopesEnum $scope) => $scope->value, $this->scopes)),
         ];
     }
 }

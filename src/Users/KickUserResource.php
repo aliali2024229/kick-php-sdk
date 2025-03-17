@@ -1,9 +1,9 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Users;
+namespace DanielHe4rt\KickSDK\Users;
 
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
-use Danielhe4rt\KickSDK\Users\Entities\KickUserEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Users\Entities\KickUserEntity;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,9 +15,7 @@ readonly class KickUserResource
     public function __construct(
         public Client $client,
         public string $accessToken,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the authenticated user's information
@@ -27,7 +25,7 @@ readonly class KickUserResource
         try {
             $response = $this->client->get(self::GET_USERS_URI, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                 ],
             ]);
         } catch (GuzzleException $e) {
@@ -39,6 +37,7 @@ readonly class KickUserResource
         }
 
         $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+
         return KickUserEntity::fromArray($responsePayload['data'][0]);
     }
 
@@ -53,7 +52,7 @@ readonly class KickUserResource
                     'id' => $userId,
                 ],
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                 ],
             ]);
         } catch (GuzzleException $e) {
@@ -76,9 +75,7 @@ readonly class KickUserResource
     /**
      * Get users by their IDs
      *
-     * @param array $userIds
      * @return KickUserEntity[]
-     *
      */
     public function fetchUsersById(array $userIds): array
     {
@@ -88,7 +85,7 @@ readonly class KickUserResource
                     'id' => $userIds,
                 ],
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                 ],
             ]);
         } catch (GuzzleException $e) {
@@ -105,7 +102,6 @@ readonly class KickUserResource
             throw KickUserException::usersNotFound();
         }
 
-        return array_map(fn(array $user) => KickUserEntity::fromArray($user), $responsePayload['data']);
+        return array_map(fn (array $user) => KickUserEntity::fromArray($user), $responsePayload['data']);
     }
-
-} 
+}

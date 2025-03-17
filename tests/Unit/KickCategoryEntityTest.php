@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
 
 test('can create KickCategoryEntity with constructor', function () {
     $entity = new KickCategoryEntity(
@@ -18,7 +18,7 @@ test('can create KickCategoryEntity from array', function () {
     $data = [
         'id' => 123,
         'name' => 'Just Chatting',
-        'thumbnail' => 'https://example.com/thumbnail.jpg'
+        'thumbnail' => 'https://example.com/thumbnail.jpg',
     ];
 
     $entity = KickCategoryEntity::fromArray($data);
@@ -40,6 +40,6 @@ test('can serialize KickCategoryEntity to array', function () {
     expect($serialized)->toBe([
         'id' => 123,
         'name' => 'Just Chatting',
-        'thumbnail' => 'https://example.com/thumbnail.jpg'
+        'thumbnail' => 'https://example.com/thumbnail.jpg',
     ]);
-}); 
+});

@@ -1,6 +1,6 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Chat;
+namespace DanielHe4rt\KickSDK\Chat;
 
 enum KickMessageTypeEnum: string
 {

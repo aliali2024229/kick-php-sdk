@@ -1,19 +1,16 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\Entities;
+namespace DanielHe4rt\KickSDK\OAuth\Entities;
 
 class KickAccessTokenEntity
 {
-
     public function __construct(
         public string $accessToken,
-        public int    $expires_in,
+        public int $expires_in,
         public string $refreshToken,
         public string $scope,
         public string $token_type,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

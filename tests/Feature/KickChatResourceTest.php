@@ -1,10 +1,10 @@
 <?php
 
-use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
-use Danielhe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
-use Danielhe4rt\KickSDK\Chat\KickChatException;
-use Danielhe4rt\KickSDK\Chat\KickChatResource;
-use Danielhe4rt\KickSDK\Chat\KickMessageTypeEnum;
+use DanielHe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
+use DanielHe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
+use DanielHe4rt\KickSDK\Chat\KickChatException;
+use DanielHe4rt\KickSDK\Chat\KickChatResource;
+use DanielHe4rt\KickSDK\Chat\KickMessageTypeEnum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
@@ -17,7 +17,7 @@ test('can send a chat message', function () {
     $responseData = [
         'data' => [
             'is_sent' => true,
-            'message_id' => 'abc123'
+            'message_id' => 'abc123',
         ],
         'message' => 'Success',
     ];
@@ -56,11 +56,11 @@ test('throws exception when unauthorized', function () {
             'Unauthorized',
             new Request('POST', 'test'),
             new Response(
-                HttpResponse::HTTP_UNAUTHORIZED, 
-                [], 
+                HttpResponse::HTTP_UNAUTHORIZED,
+                [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -78,7 +78,7 @@ test('throws exception when unauthorized', function () {
     // Expect exception
     $this->expectException(KickChatException::class);
     $this->expectExceptionMessage('Access denied. You may be missing the required scope');
-    
+
     // Call the method
     $resource->sendMessage($messageDTO);
 });
@@ -90,11 +90,11 @@ test('throws exception when forbidden', function () {
             'Forbidden',
             new Request('POST', 'test'),
             new Response(
-                HttpResponse::HTTP_FORBIDDEN, 
-                [], 
+                HttpResponse::HTTP_FORBIDDEN,
+                [],
                 json_encode(['data' => [], 'message' => 'Forbidden'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -112,7 +112,7 @@ test('throws exception when forbidden', function () {
     // Expect exception
     $this->expectException(KickChatException::class);
     $this->expectExceptionMessage('You do not have permission to send messages to this channel');
-    
+
     // Call the method
     $resource->sendMessage($messageDTO);
 });
@@ -124,11 +124,11 @@ test('throws exception when channel not found', function () {
             'Not Found',
             new Request('POST', 'test'),
             new Response(
-                HttpResponse::HTTP_NOT_FOUND, 
-                [], 
+                HttpResponse::HTTP_NOT_FOUND,
+                [],
                 json_encode(['data' => [], 'message' => 'Channel not found'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -146,7 +146,7 @@ test('throws exception when channel not found', function () {
     // Expect exception
     $this->expectException(KickChatException::class);
     $this->expectExceptionMessage('Channel with ID');
-    
+
     // Call the method
     $resource->sendMessage($messageDTO);
-}); 
+});

@@ -1,17 +1,15 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\DTOs;
+namespace DanielHe4rt\KickSDK\OAuth\DTOs;
 
-use Danielhe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
 
 readonly class RevokeTokenDTO
 {
     public function __construct(
-        public string                $token,
+        public string $token,
         public KickTokenHintTypeEnum $tokenHintType,
-    )
-    {
-    }
+    ) {}
 
     public static function make(string $token, KickTokenHintTypeEnum $tokenHintType): self
     {
@@ -24,7 +22,7 @@ readonly class RevokeTokenDTO
     public function toQueryParams(): array
     {
         $params = [
-            'token' => $this->token
+            'token' => $this->token,
         ];
 
         if ($this->tokenHintType !== null) {
@@ -33,4 +31,4 @@ readonly class RevokeTokenDTO
 
         return $params;
     }
-} 
+}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Streams;
+namespace DanielHe4rt\KickSDK\Streams;
 
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
-use Danielhe4rt\KickSDK\Streams\DTOs\UpdateChannelDTO;
-use Danielhe4rt\KickSDK\Streams\Entities\KickChannelEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Streams\DTOs\UpdateChannelDTO;
+use DanielHe4rt\KickSDK\Streams\Entities\KickChannelEntity;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use JsonException;
@@ -17,9 +17,7 @@ readonly class KickStreamResource
     public function __construct(
         public Client $client,
         public string $accessToken,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get the authenticated user's channel
@@ -28,7 +26,7 @@ readonly class KickStreamResource
     {
         try {
             $response = $this->client->get(self::CHANNELS_URI, [
-                'headers' => ['Authorization' => 'Bearer ' . $this->accessToken],
+                'headers' => ['Authorization' => 'Bearer '.$this->accessToken],
             ]);
         } catch (GuzzleException $e) {
             match ($e->getCode()) {
@@ -55,12 +53,12 @@ readonly class KickStreamResource
         try {
             $response = $this->client->get(self::CHANNELS_URI, [
                 'query' => ['broadcaster_user_id' => $channelId],
-                'headers' => ['Authorization' => 'Bearer ' . $this->accessToken],
+                'headers' => ['Authorization' => 'Bearer '.$this->accessToken],
             ]);
         } catch (GuzzleException $e) {
             match ($e->getCode()) {
                 Response::HTTP_UNAUTHORIZED => throw KickStreamException::missingScope(KickOAuthScopesEnum::CHANNEL_READ),
-                Response::HTTP_NOT_FOUND => throw KickStreamException::channelNotFound((string)$channelId),
+                Response::HTTP_NOT_FOUND => throw KickStreamException::channelNotFound((string) $channelId),
                 default => throw KickStreamException::channelFetchFailed($e),
             };
         }
@@ -68,7 +66,7 @@ readonly class KickStreamResource
         $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
         if (count($responsePayload['data']) === 0) {
-            throw KickStreamException::channelNotFound((string)$channelId);
+            throw KickStreamException::channelNotFound((string) $channelId);
         }
 
         return KickChannelEntity::fromArray($responsePayload['data'][0]);
@@ -77,8 +75,8 @@ readonly class KickStreamResource
     /**
      * Get multiple channels by their IDs
      *
-     * @param array $channelIds
      * @return array<KickChannelEntity>
+     *
      * @throws JsonException
      */
     public function getChannelsById(array $channelIds): array
@@ -86,7 +84,7 @@ readonly class KickStreamResource
         try {
             $response = $this->client->get(self::CHANNELS_URI, [
                 'query' => ['broadcaster_user_id' => $channelIds],
-                'headers' => ['Authorization' => 'Bearer ' . $this->accessToken],
+                'headers' => ['Authorization' => 'Bearer '.$this->accessToken],
             ]);
         } catch (GuzzleException $e) {
             match ($e->getCode()) {
@@ -103,22 +101,19 @@ readonly class KickStreamResource
         }
 
         return array_map(
-            static fn(array $channel) => KickChannelEntity::fromArray($channel),
+            static fn (array $channel) => KickChannelEntity::fromArray($channel),
             $responsePayload['data']
         );
     }
 
     /**
      * Update the authenticated user's channel
-     *
-     * @param UpdateChannelDTO $updateChannelDTO
-     * @return bool
      */
     public function updateChannel(UpdateChannelDTO $updateChannelDTO): bool
     {
         try {
             $response = $this->client->patch(self::CHANNELS_URI, [
-                'headers' => ['Authorization' => 'Bearer ' . $this->accessToken],
+                'headers' => ['Authorization' => 'Bearer '.$this->accessToken],
                 'json' => $updateChannelDTO->jsonSerialize(),
             ]);
         } catch (GuzzleException $e) {
@@ -131,4 +126,4 @@ readonly class KickStreamResource
 
         return $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
-} 
+}

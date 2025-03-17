@@ -1,13 +1,13 @@
 <?php
 
-namespace Danielhe4rt\KickSDK;
+namespace DanielHe4rt\KickSDK;
 
-use Danielhe4rt\KickSDK\Chat\KickChatResource;
-use Danielhe4rt\KickSDK\Events\KickEventsResource;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
-use Danielhe4rt\KickSDK\Streams\KickStreamResource;
-use Danielhe4rt\KickSDK\Users\KickUserResource;
+use DanielHe4rt\KickSDK\Chat\KickChatResource;
+use DanielHe4rt\KickSDK\Events\KickEventsResource;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthResource;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyResource;
+use DanielHe4rt\KickSDK\Streams\KickStreamResource;
+use DanielHe4rt\KickSDK\Users\KickUserResource;
 use GuzzleHttp\Client;
 
 final readonly class KickClient
@@ -17,8 +17,7 @@ final readonly class KickClient
     public function __construct(
         public string $clientId,
         public string $clientSecret,
-    )
-    {
+    ) {
         $this->client = new Client([]);
     }
 
@@ -46,7 +45,7 @@ final readonly class KickClient
             $accessToken
         );
     }
-    
+
     public function chat(string $accessToken): KickChatResource
     {
         return new KickChatResource(
@@ -54,14 +53,14 @@ final readonly class KickClient
             $accessToken
         );
     }
-    
+
     public function publicKey(): KickPublicKeyResource
     {
         return new KickPublicKeyResource(
             $this->client
         );
     }
-    
+
     public function events(string $accessToken): KickEventsResource
     {
         return new KickEventsResource(

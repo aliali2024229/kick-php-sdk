@@ -1,12 +1,12 @@
 <?php
 
-use Danielhe4rt\KickSDK\KickClient;
-use Danielhe4rt\KickSDK\Chat\KickChatResource;
-use Danielhe4rt\KickSDK\Events\KickEventsResource;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
-use Danielhe4rt\KickSDK\Streams\KickStreamResource;
-use Danielhe4rt\KickSDK\Users\KickUserResource;
+use DanielHe4rt\KickSDK\Chat\KickChatResource;
+use DanielHe4rt\KickSDK\Events\KickEventsResource;
+use DanielHe4rt\KickSDK\KickClient;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthResource;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyResource;
+use DanielHe4rt\KickSDK\Streams\KickStreamResource;
+use DanielHe4rt\KickSDK\Users\KickUserResource;
 
 test('can create KickClient with constructor', function () {
     $client = new KickClient(
@@ -87,4 +87,4 @@ test('can get Events resource', function () {
 
     expect($eventsResource)->toBeInstanceOf(KickEventsResource::class)
         ->and($eventsResource->accessToken)->toBe('test_access_token');
-}); 
+});

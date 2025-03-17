@@ -1,19 +1,17 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\Entities;
+namespace DanielHe4rt\KickSDK\OAuth\Entities;
 
 class KickIntrospectTokenEntity
 {
     public function __construct(
-        public bool   $active,
+        public bool $active,
         public string $clientId,
-        public int    $exp,
+        public int $exp,
         public string $scope,
         public string $tokenType,
         public string $message
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Streams\Entities;
+namespace DanielHe4rt\KickSDK\Streams\Entities;
 
 use JsonSerializable;
 
@@ -10,9 +10,7 @@ readonly class KickCategoryEntity implements JsonSerializable
         public int $id,
         public string $name,
         public string $thumbnail,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -31,4 +29,4 @@ readonly class KickCategoryEntity implements JsonSerializable
             'thumbnail' => $this->thumbnail,
         ];
     }
-} 
+}

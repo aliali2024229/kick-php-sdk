@@ -1,13 +1,13 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventMethodEnum;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
-use Danielhe4rt\KickSDK\Events\KickEventsException;
-use Danielhe4rt\KickSDK\Events\KickEventsResource;
+use DanielHe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventMethodEnum;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
+use DanielHe4rt\KickSDK\Events\KickEventsException;
+use DanielHe4rt\KickSDK\Events\KickEventsResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
@@ -27,7 +27,7 @@ test('can get event subscriptions', function () {
                 'version' => 1,
                 'method' => 'webhook',
                 'created_at' => '2023-01-01T00:00:00Z',
-                'updated_at' => '2023-01-01T00:00:00Z'
+                'updated_at' => '2023-01-01T00:00:00Z',
             ],
             [
                 'id' => 'sub_456',
@@ -36,8 +36,8 @@ test('can get event subscriptions', function () {
                 'version' => 1,
                 'method' => 'webhook',
                 'created_at' => '2023-01-01T00:00:00Z',
-                'updated_at' => '2023-01-01T00:00:00Z'
-            ]
+                'updated_at' => '2023-01-01T00:00:00Z',
+            ],
         ],
         'message' => 'Success',
     ];
@@ -77,7 +77,7 @@ test('throws exception when unauthorized to get subscriptions', function () {
                 [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -102,14 +102,14 @@ test('can create event subscriptions', function () {
                 'name' => 'chat.message.sent',
                 'version' => 1,
                 'subscription_id' => 'sub_123',
-                'error' => null
+                'error' => null,
             ],
             [
                 'name' => 'channel.followed',
                 'version' => 1,
                 'subscription_id' => 'sub_456',
-                'error' => null
-            ]
+                'error' => null,
+            ],
         ],
         'message' => 'Success',
     ];
@@ -128,7 +128,7 @@ test('can create event subscriptions', function () {
     // Create DTOs
     $events = [
         new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChannelFollowed, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChannelFollowed, version: 1),
     ];
 
     $dto = new CreateEventSubscriptionDTO(
@@ -162,7 +162,7 @@ test('throws exception when unauthorized to create subscriptions', function () {
                 [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -173,7 +173,7 @@ test('throws exception when unauthorized to create subscriptions', function () {
 
     // Create DTOs
     $events = [
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
     ];
 
     $dto = new CreateEventSubscriptionDTO(
@@ -218,7 +218,7 @@ test('throws exception when unauthorized to delete subscriptions', function () {
                 [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -233,4 +233,4 @@ test('throws exception when unauthorized to delete subscriptions', function () {
 
     // Call the method
     $resource->unsubscribe('sub_123');
-}); 
+});

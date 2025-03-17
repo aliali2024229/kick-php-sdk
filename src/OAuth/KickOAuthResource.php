@@ -1,17 +1,15 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth;
+namespace DanielHe4rt\KickSDK\OAuth;
 
-
-use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
+use DanielHe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Component\HttpFoundation\Response;
 
 readonly class KickOAuthResource
 {
@@ -19,10 +17,7 @@ readonly class KickOAuthResource
         public Client $client,
         public string $clientId,
         public string $clientSecret,
-    )
-    {
-
-    }
+    ) {}
 
     public function authenticate(AuthenticateDTO $authenticateDTO): KickAccessTokenEntity
     {
@@ -35,7 +30,7 @@ readonly class KickOAuthResource
                     'client_id' => $this->clientId,
                     'client_secret' => $this->clientSecret,
                     'code_verifier' => $authenticateDTO->codeVerifier,
-                ]
+                ],
             ]);
         } catch (GuzzleException $e) {
             throw KickOAuthException::authenticationFailed($e->getMessage(), $e->getCode());
@@ -58,7 +53,7 @@ readonly class KickOAuthResource
                 ],
                 'headers' => [
                     'Content-Type' => 'application/x-www-form-urlencoded',
-                ]
+                ],
             ]);
         } catch (GuzzleException $e) {
             throw KickOAuthException::refreshTokenFailed($e->getMessage(), $e->getCode());
@@ -75,7 +70,7 @@ readonly class KickOAuthResource
                 [
                     'headers' => [
                         'Content-Type' => 'application/x-www-form-urlencoded',
-                    ]
+                    ],
                 ]
             );
         } catch (GuzzleException $e) {
@@ -90,7 +85,7 @@ readonly class KickOAuthResource
         try {
             $response = $this->client->post('https://api.kick.com/public/v1/token/introspect', [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $accessToken,
+                    'Authorization' => 'Bearer '.$accessToken,
                 ],
             ]);
         } catch (GuzzleException $e) {
@@ -106,5 +101,4 @@ readonly class KickOAuthResource
     {
         return sprintf('https://id.kick.com/oauth/authorize?%s', http_build_query($redirectUrlDTO->jsonSerialize()));
     }
-
 }

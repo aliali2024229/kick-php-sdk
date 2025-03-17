@@ -1,11 +1,11 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Events;
+namespace DanielHe4rt\KickSDK\Events;
 
-use Danielhe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,14 +17,13 @@ readonly class KickEventsResource
     public function __construct(
         public Client $client,
         public string $accessToken,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Get all event subscriptions
      *
      * @return KickEventSubscriptionEntity[]
+     *
      * @throws KickEventsException
      */
     public function getSubscriptions(): array
@@ -32,7 +31,7 @@ readonly class KickEventsResource
         try {
             $response = $this->client->get(self::EVENTS_URI, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                 ],
             ]);
         } catch (GuzzleException $e) {
@@ -56,8 +55,8 @@ readonly class KickEventsResource
     /**
      * Create new event subscriptions
      *
-     * @param CreateEventSubscriptionDTO $subscriptionDTO
      * @return KickEventSubscriptionResponseEntity[] Array of subscription results
+     *
      * @throws KickEventsException
      */
     public function subscribe(CreateEventSubscriptionDTO $subscriptionDTO): array
@@ -65,7 +64,7 @@ readonly class KickEventsResource
         try {
             $response = $this->client->post(self::EVENTS_URI, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $subscriptionDTO->jsonSerialize(),
@@ -80,14 +79,15 @@ readonly class KickEventsResource
 
         $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
-        return array_map(static fn($subscription) => KickEventSubscriptionResponseEntity::fromArray($subscription), $responsePayload['data']);
+        return array_map(static fn ($subscription) => KickEventSubscriptionResponseEntity::fromArray($subscription), $responsePayload['data']);
     }
 
     /**
      * Delete event subscriptions
      *
-     * @param string $subscriptionId subscription ID to delete
+     * @param  string  $subscriptionId  subscription ID to delete
      * @return bool Whether the deletion was successful
+     *
      * @throws KickEventsException
      */
     public function unsubscribe(string $subscriptionId): bool
@@ -95,7 +95,7 @@ readonly class KickEventsResource
         try {
             $this->client->delete(self::EVENTS_URI, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                 ],
                 'query' => [
                     'id' => $subscriptionId,
@@ -111,4 +111,4 @@ readonly class KickEventsResource
 
         return true;
     }
-} 
+}

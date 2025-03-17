@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
+use DanielHe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
 
 test('can create KickChatMessageEntity with constructor', function () {
     $entity = new KickChatMessageEntity(
@@ -15,7 +15,7 @@ test('can create KickChatMessageEntity with constructor', function () {
 test('can create KickChatMessageEntity from array', function () {
     $data = [
         'is_sent' => true,
-        'message_id' => 'abc123'
+        'message_id' => 'abc123',
     ];
 
     $entity = KickChatMessageEntity::fromArray($data);
@@ -34,6 +34,6 @@ test('can serialize KickChatMessageEntity to array', function () {
 
     expect($serialized)->toBe([
         'is_sent' => true,
-        'message_id' => 'abc123'
+        'message_id' => 'abc123',
     ]);
-}); 
+});

@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\Users\Entities\KickUserEntity;
-use Danielhe4rt\KickSDK\Users\KickUserResource;
-use Danielhe4rt\KickSDK\Users\KickUserException;
+use DanielHe4rt\KickSDK\Users\Entities\KickUserEntity;
+use DanielHe4rt\KickSDK\Users\KickUserException;
+use DanielHe4rt\KickSDK\Users\KickUserResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
@@ -108,7 +108,7 @@ test('throw exception on server error', function () {
             'Server Error',
             new Request('GET', 'test'),
             new Response(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, [], json_encode(['error' => 'Server error'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     $client = new Client(['handler' => $mockHandler]);
@@ -129,11 +129,11 @@ test('throw exception on unauthorized access', function () {
             'Unauthorized',
             new Request('GET', 'test'),
             new Response(
-                HttpResponse::HTTP_UNAUTHORIZED, 
-                [], 
+                HttpResponse::HTTP_UNAUTHORIZED,
+                [],
                 json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     $client = new Client(['handler' => $mockHandler]);

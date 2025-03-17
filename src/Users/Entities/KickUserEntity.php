@@ -1,19 +1,17 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Users\Entities;
+namespace DanielHe4rt\KickSDK\Users\Entities;
 
 use JsonSerializable;
 
 readonly class KickUserEntity implements JsonSerializable
 {
     public function __construct(
-        public int     $userId,
-        public string  $username,
-        public string  $profile_picture,
+        public int $userId,
+        public string $username,
+        public string $profile_picture,
         public ?string $email = null,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -34,5 +32,4 @@ readonly class KickUserEntity implements JsonSerializable
             'email' => $this->email,
         ];
     }
-
 }

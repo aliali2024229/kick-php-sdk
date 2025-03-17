@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
+use DanielHe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
 
 test('can create EventSubscriptionDTO with constructor', function () {
     $dto = new EventSubscriptionDTO(
@@ -42,10 +42,9 @@ test('can serialize EventSubscriptionDTO to array', function () {
 
     expect($serialized)->toBe([
         'name' => 'chat.message.sent',
-        'version' => 1
+        'version' => 1,
     ]);
 });
-
 
 test('throws exception when version is less than or equal to 0', function () {
     $this->expectException(InvalidArgumentException::class);
@@ -55,4 +54,4 @@ test('throws exception when version is less than or equal to 0', function () {
         name: KickEventTypeEnum::ChannelFollowed,
         version: 0
     );
-}); 
+});

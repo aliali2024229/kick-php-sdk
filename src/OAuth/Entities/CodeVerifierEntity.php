@@ -1,16 +1,13 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\Entities;
+namespace DanielHe4rt\KickSDK\OAuth\Entities;
 
 readonly class CodeVerifierEntity
 {
     public function __construct(
         private string $code,
         private string $codeVerifier
-    )
-    {
-
-    }
+    ) {}
 
     public static function make(): self
     {

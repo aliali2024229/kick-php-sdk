@@ -1,16 +1,16 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventMethodEnum;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
+use DanielHe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventMethodEnum;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
 
 test('can create CreateEventSubscriptionDTO with constructor', function () {
     $events = [
         new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChannelFollowed, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChannelFollowed, version: 1),
     ];
-    
+
     $dto = new CreateEventSubscriptionDTO(
         events: $events
     );
@@ -21,9 +21,9 @@ test('can create CreateEventSubscriptionDTO with constructor', function () {
 
 test('can create CreateEventSubscriptionDTO with explicit method', function () {
     $events = [
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
     ];
-    
+
     $dto = new CreateEventSubscriptionDTO(
         events: $events,
         method: KickEventMethodEnum::Webhook
@@ -35,9 +35,9 @@ test('can create CreateEventSubscriptionDTO with explicit method', function () {
 
 test('can create CreateEventSubscriptionDTO using make method', function () {
     $events = [
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
     ];
-    
+
     $dto = CreateEventSubscriptionDTO::make(
         events: $events
     );
@@ -48,9 +48,9 @@ test('can create CreateEventSubscriptionDTO using make method', function () {
 
 test('can serialize CreateEventSubscriptionDTO to array', function () {
     $events = [
-        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1)
+        new EventSubscriptionDTO(name: KickEventTypeEnum::ChatMessageSent, version: 1),
     ];
-    
+
     $dto = new CreateEventSubscriptionDTO(
         events: $events
     );
@@ -61,10 +61,10 @@ test('can serialize CreateEventSubscriptionDTO to array', function () {
         'events' => [
             [
                 'name' => 'chat.message.sent',
-                'version' => 1
-            ]
+                'version' => 1,
+            ],
         ],
-        'method' => 'webhook'
+        'method' => 'webhook',
     ]);
 });
 
@@ -85,8 +85,8 @@ test('throws exception when event is not an instance of EventSubscriptionDTO', f
         events: [
             [
                 'name' => 'chat.message.sent',
-                'version' => 1
-            ]
+                'version' => 1,
+            ],
         ]
     );
-}); 
+});

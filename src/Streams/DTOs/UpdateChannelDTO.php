@@ -1,18 +1,15 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Streams\DTOs;
+namespace DanielHe4rt\KickSDK\Streams\DTOs;
 
 use JsonSerializable;
 
 readonly class UpdateChannelDTO implements JsonSerializable
 {
     public function __construct(
-        public ?int    $categoryId = null,
+        public ?int $categoryId = null,
         public ?string $streamTitle = null,
-    )
-    {
-
-    }
+    ) {}
 
     public function jsonSerialize(): array
     {

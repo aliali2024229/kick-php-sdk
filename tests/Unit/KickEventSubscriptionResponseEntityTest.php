@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionResponseEntity;
 
 test('can create KickEventSubscriptionResponseEntity with constructor', function () {
     $entity = new KickEventSubscriptionResponseEntity(
@@ -21,7 +21,7 @@ test('can create KickEventSubscriptionResponseEntity from array', function () {
         'error' => null,
         'name' => 'chat.message.sent',
         'subscription_id' => 'sub_123',
-        'version' => 1
+        'version' => 1,
     ];
 
     $entity = KickEventSubscriptionResponseEntity::fromArray($data);
@@ -37,7 +37,7 @@ test('can create KickEventSubscriptionResponseEntity with error', function () {
         'error' => 'Invalid event name',
         'name' => 'invalid.event',
         'subscription_id' => null,
-        'version' => 1
+        'version' => 1,
     ];
 
     $entity = KickEventSubscriptionResponseEntity::fromArray($data);
@@ -81,6 +81,6 @@ test('can serialize KickEventSubscriptionResponseEntity to array', function () {
         'error' => null,
         'name' => 'chat.message.sent',
         'subscription_id' => 'sub_123',
-        'version' => 1
+        'version' => 1,
     ]);
-}); 
+});

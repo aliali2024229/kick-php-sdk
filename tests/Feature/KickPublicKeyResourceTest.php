@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\PublicKey\Entities\KickPublicKeyEntity;
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyException;
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
+use DanielHe4rt\KickSDK\PublicKey\Entities\KickPublicKeyEntity;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyException;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
@@ -14,7 +14,7 @@ test('can get public key', function () {
     // Mock response data
     $responseData = [
         'data' => [
-            'public_key' => 'test-public-key'
+            'public_key' => 'test-public-key',
         ],
         'message' => 'Success',
     ];
@@ -44,11 +44,11 @@ test('throws exception when public key retrieval fails', function () {
             'Server Error',
             new Request('GET', 'test'),
             new Response(
-                HttpResponse::HTTP_INTERNAL_SERVER_ERROR, 
-                [], 
+                HttpResponse::HTTP_INTERNAL_SERVER_ERROR,
+                [],
                 json_encode(['data' => [], 'message' => 'Server Error'], JSON_THROW_ON_ERROR)
             )
-        )
+        ),
     ]);
 
     // Create resource with mock client
@@ -59,7 +59,7 @@ test('throws exception when public key retrieval fails', function () {
     // Expect exception
     $this->expectException(KickPublicKeyException::class);
     $this->expectExceptionMessage('[Kick Public Key Retrieval Failed]');
-    
+
     // Call the method
     $resource->getPublicKey();
-}); 
+});

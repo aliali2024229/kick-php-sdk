@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
-use Danielhe4rt\KickSDK\Streams\KickStreamFactory;
-use Danielhe4rt\KickSDK\Streams\KickStreamResource;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use DanielHe4rt\KickSDK\Streams\KickStreamFactory;
+use DanielHe4rt\KickSDK\Streams\KickStreamResource;
 use GuzzleHttp\Client;
 
 test('can create KickStreamResource with default client', function () {

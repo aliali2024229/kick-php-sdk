@@ -1,6 +1,6 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Streams\Entities;
+namespace DanielHe4rt\KickSDK\Streams\Entities;
 
 use JsonSerializable;
 
@@ -14,9 +14,7 @@ readonly class KickChannelEntity implements JsonSerializable
         public string $slug,
         public ?KickStreamEntity $stream,
         public string $stream_title,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): self
     {
@@ -43,4 +41,4 @@ readonly class KickChannelEntity implements JsonSerializable
             'stream_title' => $this->stream_title,
         ];
     }
-} 
+}

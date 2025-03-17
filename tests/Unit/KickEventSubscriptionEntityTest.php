@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
-use Danielhe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
+use DanielHe4rt\KickSDK\Events\Entities\KickEventSubscriptionEntity;
+use DanielHe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
 
 test('can create KickEventSubscriptionEntity with constructor', function () {
     $entity = new KickEventSubscriptionEntity(
@@ -56,7 +56,7 @@ test('can create KickEventSubscriptionEntity from array', function () {
         'version' => 1,
         'method' => 'webhook',
         'created_at' => '2023-01-01T00:00:00Z',
-        'updated_at' => '2023-01-01T00:00:00Z'
+        'updated_at' => '2023-01-01T00:00:00Z',
     ];
 
     $entity = KickEventSubscriptionEntity::fromArray($data);
@@ -79,7 +79,7 @@ test('can create KickEventSubscriptionEntity from array without broadcaster user
         'version' => 1,
         'method' => 'webhook',
         'created_at' => '2023-01-01T00:00:00Z',
-        'updated_at' => '2023-01-01T00:00:00Z'
+        'updated_at' => '2023-01-01T00:00:00Z',
     ];
 
     $entity = KickEventSubscriptionEntity::fromArray($data);
@@ -99,7 +99,7 @@ test('can serialize KickEventSubscriptionEntity to array', function () {
         id: 'sub_123',
         appId: 'app_456',
         broadcasterUserId: 789,
-        event:KickEventTypeEnum::ChatMessageSent,
+        event: KickEventTypeEnum::ChatMessageSent,
         version: 1,
         method: 'webhook',
         createdAt: '2023-01-01T00:00:00Z',
@@ -141,6 +141,6 @@ test('can serialize KickEventSubscriptionEntity to array without broadcaster use
         'version' => 1,
         'method' => 'webhook',
         'created_at' => '2023-01-01T00:00:00Z',
-        'updated_at' => '2023-01-01T00:00:00Z'
+        'updated_at' => '2023-01-01T00:00:00Z',
     ]);
-}); 
+});

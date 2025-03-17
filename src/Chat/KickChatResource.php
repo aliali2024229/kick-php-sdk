@@ -1,10 +1,10 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\Chat;
+namespace DanielHe4rt\KickSDK\Chat;
 
-use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
-use Danielhe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
+use DanielHe4rt\KickSDK\Chat\Entities\KickChatMessageEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,15 +16,11 @@ readonly class KickChatResource
     public function __construct(
         public Client $client,
         public string $accessToken,
-    )
-    {
-    }
+    ) {}
 
     /**
      * Send a chat message to a channel
-     * 
-     * @param SendChatMessageDTO $messageDTO
-     * @return KickChatMessageEntity
+     *
      * @throws KickChatException
      */
     public function sendMessage(SendChatMessageDTO $messageDTO): KickChatMessageEntity
@@ -32,7 +28,7 @@ readonly class KickChatResource
         try {
             $response = $this->client->post(self::CHAT_URI, [
                 'headers' => [
-                    'Authorization' => 'Bearer ' . $this->accessToken,
+                    'Authorization' => 'Bearer '.$this->accessToken,
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $messageDTO->jsonSerialize(),
@@ -47,7 +43,7 @@ readonly class KickChatResource
         }
 
         $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
-        
+
         return KickChatMessageEntity::fromArray($responsePayload['data']);
     }
-} 
+}

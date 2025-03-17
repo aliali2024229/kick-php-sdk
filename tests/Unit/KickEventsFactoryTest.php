@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\KickEventsFactory;
-use Danielhe4rt\KickSDK\Events\KickEventsResource;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use DanielHe4rt\KickSDK\Events\KickEventsFactory;
+use DanielHe4rt\KickSDK\Events\KickEventsResource;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
 use GuzzleHttp\Client;
 
 test('can create KickEventsResource with default client', function () {
@@ -35,4 +35,4 @@ test('can create KickEventsResource with custom client', function () {
     expect($resource)->toBeInstanceOf(KickEventsResource::class)
         ->and($resource->accessToken)->toBe('test_access_token')
         ->and($resource->client)->toBe($customClient);
-}); 
+});

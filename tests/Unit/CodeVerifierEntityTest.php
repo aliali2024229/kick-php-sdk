@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\OAuth\Entities\CodeVerifierEntity;
+use DanielHe4rt\KickSDK\OAuth\Entities\CodeVerifierEntity;
 
 test('can create CodeVerifierEntity with constructor', function () {
     $entity = new CodeVerifierEntity(
@@ -31,9 +31,9 @@ test('code challenge is correctly generated from verifier', function () {
     // Test with a known verifier
     $codeVerifier = 'test_verifier';
     $expectedChallenge = rtrim(strtr(base64_encode(hash('sha256', $codeVerifier, true)), '+/', '-_'), '=');
-    
+
     $actualChallenge = $generateCodeChallengeMethod->invoke(null, $codeVerifier);
-    
+
     expect($actualChallenge)->toBe($expectedChallenge);
 });
 
@@ -42,12 +42,12 @@ test('code verifier has correct length', function () {
     $reflectionClass = new ReflectionClass(CodeVerifierEntity::class);
     $generateCodeVerifierMethod = $reflectionClass->getMethod('generateCodeVerifier');
     $generateCodeVerifierMethod->setAccessible(true);
-    
+
     // Test with default length
     $verifier = $generateCodeVerifierMethod->invoke(null);
     expect(strlen($verifier))->toBe(128);
-    
+
     // Test with custom length
     $verifier = $generateCodeVerifierMethod->invoke(null, 64);
     expect(strlen($verifier))->toBe(64);
-}); 
+});

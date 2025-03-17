@@ -1,8 +1,8 @@
 <?php
 
-use Danielhe4rt\KickSDK\Chat\KickChatFactory;
-use Danielhe4rt\KickSDK\Chat\KickChatResource;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use DanielHe4rt\KickSDK\Chat\KickChatFactory;
+use DanielHe4rt\KickSDK\Chat\KickChatResource;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
 use GuzzleHttp\Client;
 
 test('can create KickChatResource with default client', function () {
@@ -35,4 +35,4 @@ test('can create KickChatResource with custom client', function () {
     expect($resource)->toBeInstanceOf(KickChatResource::class)
         ->and($resource->accessToken)->toBe('test_access_token')
         ->and($resource->client)->toBe($customClient);
-}); 
+});

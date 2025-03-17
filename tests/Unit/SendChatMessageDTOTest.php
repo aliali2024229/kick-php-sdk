@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
-use Danielhe4rt\KickSDK\Chat\KickMessageTypeEnum;
+use DanielHe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
+use DanielHe4rt\KickSDK\Chat\KickMessageTypeEnum;
 
 test('can create SendChatMessageDTO with default type', function () {
     $dto = new SendChatMessageDTO(
@@ -61,7 +61,7 @@ test('can serialize SendChatMessageDTO to array', function () {
     expect($serialized)->toBe([
         'broadcaster_user_id' => 123,
         'content' => 'Hello, world!',
-        'type' => 'user'
+        'type' => 'user',
     ]);
 });
 

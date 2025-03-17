@@ -1,16 +1,15 @@
 <?php
 
-
-use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
-use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthException;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
+use DanielHe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
+use DanielHe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use DanielHe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthException;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
@@ -21,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 test('can build the redirect uri', function () {
 
     $resource = new KickOAuthResource(
-        client: new Client(),
+        client: new Client,
         clientId: 'client_id',
         clientSecret: 'client_secret'
     );
@@ -36,14 +35,14 @@ test('can build the redirect uri', function () {
 
     $response = $resource->redirectUrl($redirectDTO);
 
-    $expectedUrl = "https://id.kick.com/oauth/authorize?client_id=client_id&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&response_type=code&state=state_value&code_challenge=" . $redirectDTO->codeChallenge->getCode() . "&code_challenge_method=S256&scope=channel%3Aread+chat%3Awrite";
+    $expectedUrl = 'https://id.kick.com/oauth/authorize?client_id=client_id&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&response_type=code&state=state_value&code_challenge='.$redirectDTO->codeChallenge->getCode().'&code_challenge_method=S256&scope=channel%3Aread+chat%3Awrite';
     expect($response)->toBe($expectedUrl);
 });
 
 test('throw an exception with wrong type of token', function () {
 
     $resource = new KickOAuthResource(
-        client: new Client(),
+        client: new Client,
         clientId: 'client_id',
         clientSecret: 'client_secret'
     );
@@ -59,14 +58,12 @@ test('throw an exception with wrong type of token', function () {
 
 });
 
-
 /**
  * Test if the authenticate method works as expected.
  *
  * @see https://docs.kick.com/getting-started/generating-tokens-oauth2-flow
  */
 test('can authenticate', function () {
-
 
     $mockHandler = new MockHandler([
         new Response(HttpResponse::HTTP_OK, [], json_encode([
@@ -122,7 +119,7 @@ test('can refresh token', function () {
 
 test('can revoke token', function () {
     $mockHandler = new MockHandler([
-        new Response(HttpResponse::HTTP_OK, [])
+        new Response(HttpResponse::HTTP_OK, []),
     ]);
 
     $resource = new KickOAuthResource(
@@ -136,7 +133,6 @@ test('can revoke token', function () {
 
     expect($response)->toBeTrue();
 });
-
 
 test('can introspect token', function () {
     $mockHandler = new MockHandler([
@@ -175,7 +171,7 @@ test('authenticate method throws exception on failure', function () {
             'Unauthorized',
             new Request('POST', 'https://id.kick.com/oauth/token'),
             new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_client'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
@@ -191,7 +187,7 @@ test('refresh token method throws exception on failure', function () {
             'Unauthorized',
             new Request('POST', 'https://id.kick.com/oauth/token'),
             new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_grant'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
@@ -207,7 +203,7 @@ test('revoke token method throws exception on failure', function () {
             'Bad Request',
             new Request('POST', 'https://id.kick.com/oauth/revoke'),
             new Response(HttpResponse::HTTP_BAD_REQUEST, [], json_encode(['error' => 'invalid_request'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
@@ -223,7 +219,7 @@ test('introspect token method throws exception on failure', function () {
             'Unauthorized',
             new Request('POST', 'https://api.kick.com/public/v1/token/introspect'),
             new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_token'], JSON_THROW_ON_ERROR))
-        )
+        ),
     ]);
 
     $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');

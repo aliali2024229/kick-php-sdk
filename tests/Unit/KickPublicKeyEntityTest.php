@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\PublicKey\Entities\KickPublicKeyEntity;
+use DanielHe4rt\KickSDK\PublicKey\Entities\KickPublicKeyEntity;
 
 test('can create KickPublicKeyEntity with constructor', function () {
     $entity = new KickPublicKeyEntity(
@@ -12,7 +12,7 @@ test('can create KickPublicKeyEntity with constructor', function () {
 
 test('can create KickPublicKeyEntity from array', function () {
     $data = [
-        'public_key' => 'test-public-key'
+        'public_key' => 'test-public-key',
     ];
 
     $entity = KickPublicKeyEntity::fromArray($data);
@@ -28,6 +28,6 @@ test('can serialize KickPublicKeyEntity to array', function () {
     $serialized = $entity->jsonSerialize();
 
     expect($serialized)->toBe([
-        'public_key' => 'test-public-key'
+        'public_key' => 'test-public-key',
     ]);
-}); 
+});

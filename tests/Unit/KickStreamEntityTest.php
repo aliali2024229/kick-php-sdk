@@ -1,6 +1,6 @@
 <?php
 
-use Danielhe4rt\KickSDK\Streams\Entities\KickStreamEntity;
+use DanielHe4rt\KickSDK\Streams\Entities\KickStreamEntity;
 
 test('can create KickStreamEntity with constructor', function () {
     $entity = new KickStreamEntity(
@@ -30,7 +30,7 @@ test('can create KickStreamEntity from array', function () {
         'language' => 'en',
         'start_time' => '2023-01-01T12:00:00Z',
         'url' => 'https://example.com/stream',
-        'viewer_count' => 1000
+        'viewer_count' => 1000,
     ];
 
     $entity = KickStreamEntity::fromArray($data);
@@ -64,6 +64,6 @@ test('can serialize KickStreamEntity to array', function () {
         'language' => 'en',
         'start_time' => '2023-01-01T12:00:00Z',
         'url' => 'https://example.com/stream',
-        'viewer_count' => 1000
+        'viewer_count' => 1000,
     ]);
-}); 
+});

@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\Events\KickEventsException;
-use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
+use DanielHe4rt\KickSDK\Events\KickEventsException;
+use DanielHe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 
 test('can create retrieval failed exception', function () {
     $exception = new \Exception('Test error message', 500);
@@ -50,4 +50,4 @@ test('can create forbidden exception', function () {
         ->and($eventsException->getMessage())->toContain('[Kick Forbidden]')
         ->and($eventsException->getMessage())->toContain('You do not have permission to access event subscriptions.')
         ->and($eventsException->getCode())->toBe(403);
-}); 
+});

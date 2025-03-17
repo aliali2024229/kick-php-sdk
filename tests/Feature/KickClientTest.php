@@ -1,8 +1,7 @@
 <?php
 
-
-use Danielhe4rt\KickSDK\KickClient;
-use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
+use DanielHe4rt\KickSDK\KickClient;
+use DanielHe4rt\KickSDK\OAuth\KickOAuthResource;
 
 it('can create a KickClient instance', function () {
     $clientId = 'your-client-id';

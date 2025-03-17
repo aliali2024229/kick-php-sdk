@@ -1,7 +1,7 @@
 <?php
 
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyFactory;
-use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyFactory;
+use DanielHe4rt\KickSDK\PublicKey\KickPublicKeyResource;
 use GuzzleHttp\Client;
 
 test('can create KickPublicKeyResource with default client', function () {
@@ -16,4 +16,4 @@ test('can create KickPublicKeyResource with custom client', function () {
 
     expect($resource)->toBeInstanceOf(KickPublicKeyResource::class)
         ->and($resource->client)->toBe($customClient);
-}); 
+});

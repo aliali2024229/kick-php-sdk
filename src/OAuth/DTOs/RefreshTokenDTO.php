@@ -1,14 +1,12 @@
 <?php
 
-namespace Danielhe4rt\KickSDK\OAuth\DTOs;
+namespace DanielHe4rt\KickSDK\OAuth\DTOs;
 
 readonly class RefreshTokenDTO
 {
     public function __construct(
         public string $refreshToken,
-    )
-    {
-    }
+    ) {}
 
     public static function make(string $refreshToken): self
     {
@@ -16,4 +14,4 @@ readonly class RefreshTokenDTO
             refreshToken: $refreshToken
         );
     }
-} 
+}
