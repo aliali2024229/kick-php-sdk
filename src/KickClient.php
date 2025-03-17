@@ -2,12 +2,13 @@
 
 namespace Danielhe4rt\KickSDK;
 
+use Danielhe4rt\KickSDK\Chat\KickChatResource;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
 use Danielhe4rt\KickSDK\Streams\KickStreamResource;
 use Danielhe4rt\KickSDK\Users\KickUserResource;
 use GuzzleHttp\Client;
 
-readonly class KickClient
+final readonly class KickClient
 {
     public Client $client;
 
@@ -39,6 +40,14 @@ readonly class KickClient
     public function streams(string $accessToken): KickStreamResource
     {
         return new KickStreamResource(
+            $this->client,
+            $accessToken
+        );
+    }
+    
+    public function chat(string $accessToken): KickChatResource
+    {
+        return new KickChatResource(
             $this->client,
             $accessToken
         );

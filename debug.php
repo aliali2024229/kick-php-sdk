@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
+use Danielhe4rt\KickSDK\Chat\KickMessageTypeEnum;
 use Danielhe4rt\KickSDK\KickClient;
 use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
@@ -25,6 +27,7 @@ $redirectUrlDTO = RedirectUrlDTO::make(
         KickOAuthScopesEnum::EVENTS_SUBSCRIBE,
         KickOAuthScopesEnum::CHANNEL_READ,
         KickOAuthScopesEnum::CHANNEL_WRITE,
+        KickOAuthScopesEnum::CHAT_WRITE,
     ],
     state: md5(time()),
 );
@@ -110,3 +113,16 @@ if ($updatedChannel) {
 } else {
     echo "Failed to update channel." . PHP_EOL;
 }
+
+echo '-------------------------' . PHP_EOL;
+
+$chat = $kickClient->chat($authToken->accessToken);
+
+$messageResponse = $chat->sendMessage(SendChatMessageDTO::make(
+    broadcaster_user_id: $authenticatedUser->userId,
+    content: 'Hello, world!',
+));
+
+echo "Message sent successfully!" . PHP_EOL;
+echo "Message ID: " . $messageResponse->messageId . PHP_EOL;
+echo "Message Content: " . $messageResponse->isSent . PHP_EOL;

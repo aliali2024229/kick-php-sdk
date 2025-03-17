@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 readonly class KickUserResource
 {
-    const GET_USERS_URI = 'https://api.kick.com/public/v1/users';
+    public const GET_USERS_URI = 'https://api.kick.com/public/v1/users';
 
     public function __construct(
         public Client $client,
