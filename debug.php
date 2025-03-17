@@ -3,7 +3,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
-use Danielhe4rt\KickSDK\Chat\KickMessageTypeEnum;
 use Danielhe4rt\KickSDK\KickClient;
 use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
@@ -28,6 +27,7 @@ $redirectUrlDTO = RedirectUrlDTO::make(
         KickOAuthScopesEnum::CHANNEL_READ,
         KickOAuthScopesEnum::CHANNEL_WRITE,
         KickOAuthScopesEnum::CHAT_WRITE,
+        KickOAuthScopesEnum::STREAMKEY_READ,
     ],
     state: md5(time()),
 );
@@ -126,3 +126,9 @@ $messageResponse = $chat->sendMessage(SendChatMessageDTO::make(
 echo "Message sent successfully!" . PHP_EOL;
 echo "Message ID: " . $messageResponse->messageId . PHP_EOL;
 echo "Message Content: " . $messageResponse->isSent . PHP_EOL;
+echo "----------------" . PHP_EOL;
+
+$keyClient = $kickClient->publicKey();
+
+$keyResponse = $keyClient->getPublicKey();
+echo "Public Key: " . $keyResponse->publicKey . PHP_EOL;
