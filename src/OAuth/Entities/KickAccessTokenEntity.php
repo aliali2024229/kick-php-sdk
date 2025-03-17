@@ -6,9 +6,9 @@ class KickAccessTokenEntity
 {
 
     public function __construct(
-        public string $access_token,
+        public string $accessToken,
         public int    $expires_in,
-        public string $refresh_token,
+        public string $refreshToken,
         public string $scope,
         public string $token_type,
     )

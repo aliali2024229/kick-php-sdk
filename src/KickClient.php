@@ -3,6 +3,7 @@
 namespace Danielhe4rt\KickSDK;
 
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
+use Danielhe4rt\KickSDK\Users\KickUserResource;
 use GuzzleHttp\Client;
 
 readonly class KickClient
@@ -23,6 +24,14 @@ readonly class KickClient
             $this->client,
             $this->clientId,
             $this->clientSecret,
+        );
+    }
+
+    public function users(string $accessToken): KickUserResource
+    {
+        return new KickUserResource(
+            $this->client,
+            $accessToken
         );
     }
 }

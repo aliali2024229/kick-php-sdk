@@ -4,7 +4,6 @@ namespace Danielhe4rt\KickSDK\OAuth;
 
 
 use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
-use Danielhe4rt\KickSDK\OAuth\DTOs\AuthorizeDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
@@ -45,7 +44,9 @@ readonly class KickOAuthResource
             );
         }
 
-        return KickAccessTokenEntity::fromArray(json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR));
+        return KickAccessTokenEntity::fromArray(
+            json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)
+        );
     }
 
     public function refreshToken(RefreshTokenDTO $refreshTokenDTO): KickAccessTokenEntity

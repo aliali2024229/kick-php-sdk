@@ -9,6 +9,7 @@ use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
 use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
 use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use Danielhe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
+use Danielhe4rt\KickSDK\OAuth\KickOAuthException;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -34,6 +35,25 @@ test('can build the redirect uri', function () {
 
     $expectedUrl = "https://id.kick.com/oauth/authorize?client_id=client_id&redirect_uri=https%3A%2F%2Fexample.com%2Fcallback&response_type=code&state=state_value&code_challenge=" . $redirectDTO->codeChallenge->getCode() . "&code_challenge_method=S256&scope=channel%3Aread+chat%3Awrite";
     expect($response)->toBe($expectedUrl);
+});
+
+test('throw an exception with wrong type of token', function () {
+
+    $resource = new KickOAuthResource(
+        client: new Client(),
+        clientId: 'client_id',
+        clientSecret: 'client_secret'
+    );
+
+    $this->expectException(KickOAuthException::class);
+    $redirectDTO = RedirectUrlDTO::make(
+        clientId: 'client_id',
+        redirectUri: 'https://example.com/callback',
+        responseType: 'code',
+        scopes: ['not-a-enumerator'],
+        state: 'state_value',
+    );
+
 });
 
 
@@ -64,6 +84,7 @@ test('can authenticate', function () {
     $authenticateDTO = AuthenticateDTO::make(
         code: 'authorization_code_value',
         codeVerifier: 'definitely_a_code_verifier_value',
+        redirectUrl: 'https://example.com/callback',
     );
 
     $response = $resource->authenticate($authenticateDTO);
@@ -93,7 +114,7 @@ test('can refresh token', function () {
     $response = $resource->refreshToken($refreshTokenDTO);
 
     expect($response)->toBeInstanceOf(KickAccessTokenEntity::class)
-        ->and($response->access_token)->toBe('new_access_token_value');
+        ->and($response->accessToken)->toBe('new_access_token_value');
 });
 
 test('can revoke token', function () {
@@ -143,4 +164,16 @@ test('can introspect token', function () {
         ->and($response->scope)->toBe('text')
         ->and($response->tokenType)->toBe('text')
         ->and($response->message)->toBe('text');
+});
+
+test('authenticate method throws exception on failure', function () {
+    $mockHandler = new MockHandler([
+        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED),
+    ]);
+
+    $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
+    $authenticateDTO = new AuthenticateDTO('code', 'redirect_uri', 'code_verifier');
+
+    $this->expectException(KickOAuthException::class);
+    $resource->authenticate($authenticateDTO);
 });

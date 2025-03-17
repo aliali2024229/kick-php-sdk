@@ -12,11 +12,12 @@ readonly class AuthenticateDTO
     {
     }
 
-    public static function make(string $code, string $codeVerifier): self
+    public static function make(string $code, string $codeVerifier, string $redirectUrl): self
     {
         return new self(
             code: $code,
-            codeVerifier: $codeVerifier
+            codeVerifier: $codeVerifier,
+            redirectUri: $redirectUrl,
         );
     }
 }
