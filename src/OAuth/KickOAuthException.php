@@ -29,4 +29,10 @@ class KickOAuthException extends InvalidArgumentException
         $message = sprintf("[Kick Invalid scope] The provided scope '%s' is invalid. Check the 'KickAuthScopesEnum' for the given options.", $invalidScope);
         return new self(message: $message);
     }
+
+    public static function introspectTokenFailed(string $getContents, int $getStatusCode)
+    {
+        $message = sprintf("[Kick Introspect Token failed] Context: %s", $getContents);
+        return new self(message: $message, code: $getStatusCode);
+    }
 }

@@ -9,6 +9,7 @@ use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
 use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -90,6 +91,26 @@ readonly class KickOAuthResource
         }
 
         return true;
+    }
+
+    public function introspectToken(string $accessToken): KickIntrospectTokenEntity
+    {
+        $response = $this->client->post('https://api.kick.com/public/v1/token/introspect', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $accessToken,
+            ],
+        ]);
+
+        if ($response->getStatusCode() !== Response::HTTP_OK) {
+            throw KickOAuthException::introspectTokenFailed(
+                $response->getBody()->getContents(),
+                $response->getStatusCode()
+            );
+        }
+
+        return KickIntrospectTokenEntity::fromArray(
+            json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR)
+        );
     }
 
     public function redirectUrl(RedirectUrlDTO $redirectUrlDTO): string

@@ -6,6 +6,7 @@ use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RefreshTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
+use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
 use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use Danielhe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
@@ -110,4 +111,36 @@ test('can revoke token', function () {
     $response = $resource->revokeToken($refreshTokenDTO);
 
     expect($response)->toBeTrue();
+});
+
+
+test('can introspect token', function () {
+    $mockHandler = new MockHandler([
+        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+            'data' => [
+                'active' => true,
+                'client_id' => 'text',
+                'exp' => 1,
+                'scope' => 'text',
+                'token_type' => 'text',
+            ],
+            'message' => 'text',
+        ], JSON_THROW_ON_ERROR)),
+    ]);
+
+    $resource = new KickOAuthResource(
+        client: new Client(['handler' => $mockHandler]),
+        clientId: 'client_id',
+        clientSecret: 'client_secret'
+    );
+
+    $response = $resource->introspectToken('access_token_value');
+
+    expect($response)->toBeInstanceOf(KickIntrospectTokenEntity::class)
+        ->and($response->active)->toBeTrue()
+        ->and($response->clientId)->toBe('text')
+        ->and($response->exp)->toBe(1)
+        ->and($response->scope)->toBe('text')
+        ->and($response->tokenType)->toBe('text')
+        ->and($response->message)->toBe('text');
 });
