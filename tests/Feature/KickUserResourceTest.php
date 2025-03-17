@@ -2,9 +2,13 @@
 
 use Danielhe4rt\KickSDK\Users\Entities\KickUserEntity;
 use Danielhe4rt\KickSDK\Users\KickUserResource;
-use Danielhe4rt\KickSDK\Users\UserException;
+use Danielhe4rt\KickSDK\Users\KickUserException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 test('can create a KickUserEntity from an array', function () {
 
@@ -26,7 +30,7 @@ test('can create a KickUserEntity from an array', function () {
 test('can fetch a user by ID', function () {
     $userId = 12345;
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+        new Response(HttpResponse::HTTP_OK, [], json_encode([
             'data' => [
                 [
                     'user_id' => $userId,
@@ -39,7 +43,7 @@ test('can fetch a user by ID', function () {
         ], JSON_THROW_ON_ERROR)),
     ]);
 
-    $client = new GuzzleHttp\Client(['handler' => $mockHandler]);
+    $client = new Client(['handler' => $mockHandler]);
 
     $userResource = new KickUserResource(
         client: $client,
@@ -58,7 +62,7 @@ test('can fetch a user by ID', function () {
 test('can fetch a users by ID', function () {
     $userIds = [12345, 67890];
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+        new Response(HttpResponse::HTTP_OK, [], json_encode([
             'data' => [
                 [
                     'user_id' => $userIds[0],
@@ -77,7 +81,7 @@ test('can fetch a users by ID', function () {
         ], JSON_THROW_ON_ERROR)),
     ]);
 
-    $client = new GuzzleHttp\Client(['handler' => $mockHandler]);
+    $client = new Client(['handler' => $mockHandler]);
 
     $userResource = new KickUserResource(
         client: $client,
@@ -97,20 +101,49 @@ test('can fetch a users by ID', function () {
     }
 });
 
-test('throw exception on users me', function () {
+test('throw exception on server error', function () {
     $userId = 12345;
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR)
+        new ClientException(
+            'Server Error',
+            new Request('GET', 'test'),
+            new Response(HttpResponse::HTTP_INTERNAL_SERVER_ERROR, [], json_encode(['error' => 'Server error'], JSON_THROW_ON_ERROR))
+        )
     ]);
 
-    $client = new GuzzleHttp\Client(['handler' => $mockHandler]);
+    $client = new Client(['handler' => $mockHandler]);
 
     $userResource = new KickUserResource(
         client: $client,
         accessToken: 'valid_access_token',
     );
 
+    $this->expectException(KickUserException::class);
+    $actualResponse = $userResource->fetchUserById($userId);
+});
 
-    $this->expectException(UserException::class);
+test('throw exception on unauthorized access', function () {
+    $userId = 12345;
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Unauthorized',
+            new Request('GET', 'test'),
+            new Response(
+                HttpResponse::HTTP_UNAUTHORIZED, 
+                [], 
+                json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
+            )
+        )
+    ]);
+
+    $client = new Client(['handler' => $mockHandler]);
+
+    $userResource = new KickUserResource(
+        client: $client,
+        accessToken: 'invalid_access_token',
+    );
+
+    $this->expectException(KickUserException::class);
+    $this->expectExceptionMessage('Access denied. You may be missing the required scope');
     $actualResponse = $userResource->fetchUserById($userId);
 });

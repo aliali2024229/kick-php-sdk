@@ -2,9 +2,11 @@
 
 namespace Danielhe4rt\KickSDK\Users;
 
+use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use InvalidArgumentException;
+use Throwable;
 
-class UserException extends InvalidArgumentException
+class KickUserException extends InvalidArgumentException
 {
     public static function userFetchFailed(string $context, int $status): self
     {
@@ -21,5 +23,11 @@ class UserException extends InvalidArgumentException
     public static function usersNotFound(): self
     {
         return new self(message: "[Kick Users Not Found] No users were found. Are you sure you're passing the right id's?");
+    }
+    
+    public static function missingScope(KickOAuthScopesEnum $enum): self
+    {
+        $message = sprintf("[Kick Unauthorized] Access denied. You may be missing the required scope (%s).", $enum->value);
+        return new self(message: $message, code: 401);
     }
 } 

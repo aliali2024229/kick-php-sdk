@@ -2,8 +2,10 @@
 
 namespace Danielhe4rt\KickSDK\Users;
 
+use Danielhe4rt\KickSDK\OAuth\Enums\KickOAuthScopesEnum;
 use Danielhe4rt\KickSDK\Users\Entities\KickUserEntity;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Response;
 
 readonly class KickUserResource
@@ -22,17 +24,18 @@ readonly class KickUserResource
      */
     public function me(): KickUserEntity
     {
-        $response = $this->client->get(self::GET_USERS_URI, [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->accessToken,
-            ],
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw UserException::userFetchFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->get(self::GET_USERS_URI, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                ],
+            ]);
+        } catch (GuzzleException $e) {
+            match ($e->getCode()) {
+                Response::HTTP_UNAUTHORIZED => throw KickUserException::missingScope(KickOAuthScopesEnum::USER_READ),
+                Response::HTTP_NOT_FOUND => throw KickUserException::userNotFound('current user'),
+                default => throw KickUserException::userFetchFailed($e->getMessage(), $e->getCode()),
+            };
         }
 
         $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
@@ -44,29 +47,30 @@ readonly class KickUserResource
      */
     public function fetchUserById(string $userId): KickUserEntity
     {
-        $response = $this->client->get(self::GET_USERS_URI, [
-            'query' => [
-                'id' => $userId,
-            ],
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->accessToken,
-            ],
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw UserException::userFetchFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->get(self::GET_USERS_URI, [
+                'query' => [
+                    'id' => $userId,
+                ],
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                ],
+            ]);
+        } catch (GuzzleException $e) {
+            match ($e->getCode()) {
+                Response::HTTP_UNAUTHORIZED => throw KickUserException::missingScope(KickOAuthScopesEnum::USER_READ),
+                Response::HTTP_NOT_FOUND => throw KickUserException::userNotFound($userId),
+                default => throw KickUserException::userFetchFailed($e->getMessage(), $e->getCode()),
+            };
         }
 
-        $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
-        if (count($response['data']) === 0) {
-            throw UserException::userNotFound($userId);
+        if (count($responsePayload['data']) === 0) {
+            throw KickUserException::userNotFound($userId);
         }
 
-        return KickUserEntity::fromArray($response['data'][0]);
+        return KickUserEntity::fromArray($responsePayload['data'][0]);
     }
 
     /**
@@ -78,29 +82,30 @@ readonly class KickUserResource
      */
     public function fetchUsersById(array $userIds): array
     {
-        $response = $this->client->get(self::GET_USERS_URI, [
-            'query' => [
-                'id' => $userIds,
-            ],
-            'headers' => [
-                'Authorization' => 'Bearer ' . $this->accessToken,
-            ],
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw UserException::userFetchFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->get(self::GET_USERS_URI, [
+                'query' => [
+                    'id' => $userIds,
+                ],
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->accessToken,
+                ],
+            ]);
+        } catch (GuzzleException $e) {
+            match ($e->getCode()) {
+                Response::HTTP_UNAUTHORIZED => throw KickUserException::missingScope(KickOAuthScopesEnum::USER_READ),
+                Response::HTTP_NOT_FOUND => throw KickUserException::usersNotFound(),
+                default => throw KickUserException::userFetchFailed($e->getMessage(), $e->getCode()),
+            };
         }
 
-        $response = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        $responsePayload = json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
 
-        if (count($response['data']) === 0) {
-            throw UserException::usersNotFound();
+        if (count($responsePayload['data']) === 0) {
+            throw KickUserException::usersNotFound();
         }
 
-        return array_map(fn(array $user) => KickUserEntity::fromArray($user), $response['data']);
+        return array_map(fn(array $user) => KickUserEntity::fromArray($user), $responsePayload['data']);
     }
 
 } 
