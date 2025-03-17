@@ -1,0 +1,28 @@
+<?php
+
+namespace Danielhe4rt\KickSDK;
+
+use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
+use GuzzleHttp\Client;
+
+readonly class KickClient
+{
+    public Client $client;
+
+    public function __construct(
+        public string $clientId,
+        public string $clientSecret,
+    )
+    {
+        $this->client = new Client([]);
+    }
+
+    public function oauth(): KickOAuthResource
+    {
+        return new KickOAuthResource(
+            $this->client,
+            $this->clientId,
+            $this->clientSecret,
+        );
+    }
+}
