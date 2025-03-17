@@ -10,6 +10,7 @@ use Danielhe4rt\KickSDK\OAuth\DTOs\RevokeTokenDTO;
 use Danielhe4rt\KickSDK\OAuth\Entities\KickAccessTokenEntity;
 use Danielhe4rt\KickSDK\OAuth\Entities\KickIntrospectTokenEntity;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\HttpFoundation\Response;
 
 readonly class KickOAuthResource
@@ -25,23 +26,19 @@ readonly class KickOAuthResource
 
     public function authenticate(AuthenticateDTO $authenticateDTO): KickAccessTokenEntity
     {
-        $response = $this->client->post('https://id.kick.com/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'authorization_code',
-                'code' => $authenticateDTO->code,
-                'redirect_uri' => $authenticateDTO->redirectUri,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-                'code_verifier' => $authenticateDTO->codeVerifier,
-            ]
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            // Optionally, log the error or handle it as needed
-            throw KickOAuthException::authenticationFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->post('https://id.kick.com/oauth/token', [
+                'form_params' => [
+                    'grant_type' => 'authorization_code',
+                    'code' => $authenticateDTO->code,
+                    'redirect_uri' => $authenticateDTO->redirectUri,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                    'code_verifier' => $authenticateDTO->codeVerifier,
+                ]
+            ]);
+        } catch (GuzzleException $e) {
+            throw KickOAuthException::authenticationFailed($e->getMessage(), $e->getCode());
         }
 
         return KickAccessTokenEntity::fromArray(
@@ -51,23 +48,20 @@ readonly class KickOAuthResource
 
     public function refreshToken(RefreshTokenDTO $refreshTokenDTO): KickAccessTokenEntity
     {
-        $response = $this->client->post('https://id.kick.com/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'refresh_token',
-                'refresh_token' => $refreshTokenDTO->refreshToken,
-                'client_id' => $this->clientId,
-                'client_secret' => $this->clientSecret,
-            ],
-            'headers' => [
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ]
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw KickOAuthException::refreshTokenFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->post('https://id.kick.com/oauth/token', [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $refreshTokenDTO->refreshToken,
+                    'client_id' => $this->clientId,
+                    'client_secret' => $this->clientSecret,
+                ],
+                'headers' => [
+                    'Content-Type' => 'application/x-www-form-urlencoded',
+                ]
+            ]);
+        } catch (GuzzleException $e) {
+            throw KickOAuthException::refreshTokenFailed($e->getMessage(), $e->getCode());
         }
 
         return KickAccessTokenEntity::fromArray(json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR));
@@ -75,20 +69,17 @@ readonly class KickOAuthResource
 
     public function revokeToken(RevokeTokenDTO $revokeTokenDTO): bool
     {
-        $response = $this->client->post(
-            sprintf('https://id.kick.com/oauth/revoke?%s', http_build_query($revokeTokenDTO->toQueryParams())),
-            [
-                'headers' => [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
+        try {
+            $response = $this->client->post(
+                sprintf('https://id.kick.com/oauth/revoke?%s', http_build_query($revokeTokenDTO->toQueryParams())),
+                [
+                    'headers' => [
+                        'Content-Type' => 'application/x-www-form-urlencoded',
+                    ]
                 ]
-            ]
-        );
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw KickOAuthException::revokeTokenFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
             );
+        } catch (GuzzleException $e) {
+            throw KickOAuthException::revokeTokenFailed($e->getMessage(), $e->getCode());
         }
 
         return true;
@@ -96,17 +87,14 @@ readonly class KickOAuthResource
 
     public function introspectToken(string $accessToken): KickIntrospectTokenEntity
     {
-        $response = $this->client->post('https://api.kick.com/public/v1/token/introspect', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $accessToken,
-            ],
-        ]);
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw KickOAuthException::introspectTokenFailed(
-                $response->getBody()->getContents(),
-                $response->getStatusCode()
-            );
+        try {
+            $response = $this->client->post('https://api.kick.com/public/v1/token/introspect', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $accessToken,
+                ],
+            ]);
+        } catch (GuzzleException $e) {
+            throw KickOAuthException::introspectTokenFailed($e->getMessage(), $e->getCode());
         }
 
         return KickIntrospectTokenEntity::fromArray(

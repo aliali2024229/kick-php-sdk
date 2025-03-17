@@ -12,8 +12,11 @@ use Danielhe4rt\KickSDK\OAuth\Enums\KickTokenHintTypeEnum;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthException;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 test('can build the redirect uri', function () {
 
@@ -66,7 +69,7 @@ test('can authenticate', function () {
 
 
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+        new Response(HttpResponse::HTTP_OK, [], json_encode([
             'access_token' => 'access_token_value',
             'expires_in' => 3600,
             'refresh_token' => 'refresh_token_value',
@@ -95,7 +98,7 @@ test('can authenticate', function () {
 test('can refresh token', function () {
 
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+        new Response(HttpResponse::HTTP_OK, [], json_encode([
             'access_token' => 'new_access_token_value',
             'expires_in' => 3600,
             'refresh_token' => 'new_refresh_token_value',
@@ -119,7 +122,7 @@ test('can refresh token', function () {
 
 test('can revoke token', function () {
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [])
+        new Response(HttpResponse::HTTP_OK, [])
     ]);
 
     $resource = new KickOAuthResource(
@@ -137,7 +140,7 @@ test('can revoke token', function () {
 
 test('can introspect token', function () {
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_OK, [], json_encode([
+        new Response(HttpResponse::HTTP_OK, [], json_encode([
             'data' => [
                 'active' => true,
                 'client_id' => 'text',
@@ -168,7 +171,11 @@ test('can introspect token', function () {
 
 test('authenticate method throws exception on failure', function () {
     $mockHandler = new MockHandler([
-        new Response(\Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED),
+        new ClientException(
+            'Unauthorized',
+            new Request('POST', 'https://id.kick.com/oauth/token'),
+            new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_client'], JSON_THROW_ON_ERROR))
+        )
     ]);
 
     $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
@@ -176,4 +183,51 @@ test('authenticate method throws exception on failure', function () {
 
     $this->expectException(KickOAuthException::class);
     $resource->authenticate($authenticateDTO);
+});
+
+test('refresh token method throws exception on failure', function () {
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Unauthorized',
+            new Request('POST', 'https://id.kick.com/oauth/token'),
+            new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_grant'], JSON_THROW_ON_ERROR))
+        )
+    ]);
+
+    $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
+    $refreshTokenDTO = RefreshTokenDTO::make('invalid_refresh_token');
+
+    $this->expectException(KickOAuthException::class);
+    $resource->refreshToken($refreshTokenDTO);
+});
+
+test('revoke token method throws exception on failure', function () {
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Bad Request',
+            new Request('POST', 'https://id.kick.com/oauth/revoke'),
+            new Response(HttpResponse::HTTP_BAD_REQUEST, [], json_encode(['error' => 'invalid_request'], JSON_THROW_ON_ERROR))
+        )
+    ]);
+
+    $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
+    $revokeTokenDTO = RevokeTokenDTO::make('invalid_token', KickTokenHintTypeEnum::ACCESS_TOKEN);
+
+    $this->expectException(KickOAuthException::class);
+    $resource->revokeToken($revokeTokenDTO);
+});
+
+test('introspect token method throws exception on failure', function () {
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Unauthorized',
+            new Request('POST', 'https://api.kick.com/public/v1/token/introspect'),
+            new Response(HttpResponse::HTTP_UNAUTHORIZED, [], json_encode(['error' => 'invalid_token'], JSON_THROW_ON_ERROR))
+        )
+    ]);
+
+    $resource = new KickOAuthResource(new Client(['handler' => $mockHandler]), 'client_id', 'client_secret');
+
+    $this->expectException(KickOAuthException::class);
+    $resource->introspectToken('invalid_access_token');
 });
