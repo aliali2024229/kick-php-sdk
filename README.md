@@ -1,6 +1,12 @@
-# Kick PHP SDK
+<div align="center">
 
 [![Tests](https://github.com/danielhe4rt/kick-php-sdk/actions/workflows/test.yml/badge.svg)](https://github.com/danielhe4rt/kick-php-sdk/actions/workflows/test.yml)
+
+</div>
+
+<h1 align="center"> Kick PHP SDK </h1>
+
+<img src="./.github/assets/logo.png" width=90 align="left" />
 
 A PHP SDK for interacting with the [Kick.com](https://kick.com) API. This SDK provides a simple and intuitive way to
 authenticate with Kick's OAuth 2.0 implementation and interact with various Kick API endpoints.
@@ -15,36 +21,6 @@ authenticate with Kick's OAuth 2.0 implementation and interact with various Kick
 ```bash
 composer require danielhe4rt/kick-php-sdk
 ```
-
-## Features
-
-### Implemented
-
-- **Authorization Code Flow with PKCE**
-    - Generate authorization URLs
-    - Exchange authorization codes for access tokens
-    - Refresh access tokens
-    - Revoke access tokens
-    - Token introspection
-- **User API**
-    - Fetch authenticated user information
-    - Fetch user by ID
-    - Fetch multiple users by IDs
-
-### Not Yet Implemented
-
-- **Channel API**
-    - Channel information retrieval
-    - Channel metadata updates
-- **Chat API**
-    - Send chat messages
-    - Chat event subscriptions
-- **Stream API**
-    - Stream information retrieval
-    - Stream metadata updates
-- **Events API**
-    - Event subscriptions
-    - Event handling
 
 ## Usage
 
@@ -98,10 +74,12 @@ echo "Authenticated User Profile Picture: " . $authenticatedUser->profile_pictur
 echo "Authenticated User Email: " . ($authenticatedUser->email ?? 'Not provided. See scopes') . PHP_EOL;
 ```
 
+> See [examples](examples.php) for more usage examples.
+
 ## Roadmap
 
-- [ ] Finish implementing all resources
-- [ ] Add comprehensive test coverage (90%+)
+- [x] Finish implementing all resources
+- [x] Add comprehensive test coverage (90%+)
 - [ ] Add more examples and documentation
 
 ## Contributing
