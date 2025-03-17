@@ -53,6 +53,19 @@ enum KickOAuthScopesEnum: string
      * @description Subscribe to all channel events on Kick e.g. chat messages, follows, subscriptions.
      */
     case EVENTS_SUBSCRIBE = 'events:subscribe';
-
+    
+    /**
+     * @scope events:read
+     * @summary Read event subscriptions
+     * @description Read event subscriptions for your application.
+     */
+    case EVENTS_READ = 'events:read';
+    
+    /**
+     * @scope events:write
+     * @summary Manage event subscriptions
+     * @description Create and delete event subscriptions for your application.
+     */
+    case EVENTS_WRITE = 'events:write';
 }
 

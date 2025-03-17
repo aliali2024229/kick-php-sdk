@@ -2,6 +2,7 @@
 
 use Danielhe4rt\KickSDK\KickClient;
 use Danielhe4rt\KickSDK\Chat\KickChatResource;
+use Danielhe4rt\KickSDK\Events\KickEventsResource;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
 use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
 use Danielhe4rt\KickSDK\Streams\KickStreamResource;
@@ -74,4 +75,16 @@ test('can get Public Key resource', function () {
     $publicKeyResource = $client->publicKey();
 
     expect($publicKeyResource)->toBeInstanceOf(KickPublicKeyResource::class);
+});
+
+test('can get Events resource', function () {
+    $client = new KickClient(
+        clientId: 'test_client_id',
+        clientSecret: 'test_client_secret'
+    );
+
+    $eventsResource = $client->events('test_access_token');
+
+    expect($eventsResource)->toBeInstanceOf(KickEventsResource::class)
+        ->and($eventsResource->accessToken)->toBe('test_access_token');
 }); 

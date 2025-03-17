@@ -3,6 +3,9 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Danielhe4rt\KickSDK\Chat\DTOs\SendChatMessageDTO;
+use Danielhe4rt\KickSDK\Events\DTOs\CreateEventSubscriptionDTO;
+use Danielhe4rt\KickSDK\Events\DTOs\EventSubscriptionDTO;
+use Danielhe4rt\KickSDK\Events\Enums\KickEventTypeEnum;
 use Danielhe4rt\KickSDK\KickClient;
 use Danielhe4rt\KickSDK\OAuth\DTOs\AuthenticateDTO;
 use Danielhe4rt\KickSDK\OAuth\DTOs\RedirectUrlDTO;
@@ -128,7 +131,46 @@ echo "Message ID: " . $messageResponse->messageId . PHP_EOL;
 echo "Message Content: " . $messageResponse->isSent . PHP_EOL;
 echo "----------------" . PHP_EOL;
 
-$keyClient = $kickClient->publicKey();
+// TODO: Ask on discord why this isn't working.
+//
+//$keyClient = $kickClient->publicKey();
+//
+//$keyResponse = $keyClient->getPublicKey();
+//echo "Public Key: " . $keyResponse->publicKey . PHP_EOL;
+//echo "----------------" . PHP_EOL;
 
-$keyResponse = $keyClient->getPublicKey();
-echo "Public Key: " . $keyResponse->publicKey . PHP_EOL;
+$eventsClient = $kickClient->events($authToken->accessToken);
+
+$eventsSubscribed = $eventsClient->subscribe(CreateEventSubscriptionDTO::make([
+    EventSubscriptionDTO::make(KickEventTypeEnum::ChatMessageSent),
+    EventSubscriptionDTO::make(KickEventTypeEnum::LivestreamStatusUpdated)
+]));
+
+foreach ($eventsSubscribed as $event) {
+    echo "> New Event ID: " . $event->name . PHP_EOL;
+    echo "> New Event Version: " . $event->version . PHP_EOL;
+    echo "> New Event Status: " . $event->subscriptionId . PHP_EOL;
+    echo "----------------" . PHP_EOL;
+}
+
+
+$events = $eventsClient->getSubscriptions();
+echo "Subscribed Events: " . count($events) . PHP_EOL;
+foreach ($events as $event) {
+    echo " > Event ID: " . $event->id . PHP_EOL;
+    echo " > Event Type: " . $event->event->value . PHP_EOL;
+    echo " > Event Method: " . $event->method . PHP_EOL;
+    echo " > Event Version: " . $event->appId . PHP_EOL;
+    echo " > Event Status: " . $event->broadcasterUserId . PHP_EOL;
+    echo " > Event Created At: " . $event->createdAt . PHP_EOL;
+    echo " > Event Created At: " . $event->updatedAt . PHP_EOL;
+    echo "----------------" . PHP_EOL;
+}
+
+
+$subscribedIds = array_map(static fn($event) => $event->id, $events);
+echo "Subscribed IDs: " . implode(', ', $subscribedIds) . PHP_EOL;
+foreach ($subscribedIds as $id) {
+    $eventsClient->unsubscribe($id);
+    echo "Unsubscribed from event with ID: " . $id . PHP_EOL;
+}

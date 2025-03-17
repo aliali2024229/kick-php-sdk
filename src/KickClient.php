@@ -3,6 +3,7 @@
 namespace Danielhe4rt\KickSDK;
 
 use Danielhe4rt\KickSDK\Chat\KickChatResource;
+use Danielhe4rt\KickSDK\Events\KickEventsResource;
 use Danielhe4rt\KickSDK\OAuth\KickOAuthResource;
 use Danielhe4rt\KickSDK\PublicKey\KickPublicKeyResource;
 use Danielhe4rt\KickSDK\Streams\KickStreamResource;
@@ -58,6 +59,14 @@ final readonly class KickClient
     {
         return new KickPublicKeyResource(
             $this->client
+        );
+    }
+    
+    public function events(string $accessToken): KickEventsResource
+    {
+        return new KickEventsResource(
+            $this->client,
+            $accessToken
         );
     }
 }
