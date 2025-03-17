@@ -20,7 +20,6 @@ readonly class KickChannelEntity implements JsonSerializable
 
     public static function fromArray(array $data): self
     {
-        var_dump($data);
         return new self(
             banner_picture: $data['banner_picture'],
             broadcaster_user_id: $data['broadcaster_user_id'],

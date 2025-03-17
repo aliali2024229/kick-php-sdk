@@ -1,5 +1,6 @@
 <?php
 
+use Danielhe4rt\KickSDK\Streams\DTOs\UpdateChannelDTO;
 use Danielhe4rt\KickSDK\Streams\Entities\KickCategoryEntity;
 use Danielhe4rt\KickSDK\Streams\Entities\KickChannelEntity;
 use Danielhe4rt\KickSDK\Streams\Entities\KickStreamEntity;
@@ -293,4 +294,96 @@ test('throws exception when no channels found in multiple request', function () 
     
     // Call the method
     $resource->getChannelsById([999999, 888888]);
+});
+
+test('can update channel', function () {
+    // Create mock handler
+    $mockHandler = new MockHandler([
+        new Response(HttpResponse::HTTP_NO_CONTENT, []),
+    ]);
+
+    // Create resource with mock client
+    $resource = new KickStreamResource(
+        client: new Client(['handler' => $mockHandler]),
+        accessToken: 'test_access_token'
+    );
+
+    // Create DTO
+    $updateChannelDTO = new UpdateChannelDTO(
+        categoryId: 123,
+        streamTitle: 'Updated Stream Title'
+    );
+
+    // Call the method
+    $result = $resource->updateChannel($updateChannelDTO);
+
+    // Assert response
+    expect($result)->toBeTrue();
+});
+
+test('throws exception when updating channel with missing scope', function () {
+    // Create mock handler with 401 Unauthorized response
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Unauthorized',
+            new Request('PATCH', 'test'),
+            new Response(
+                HttpResponse::HTTP_UNAUTHORIZED, 
+                [], 
+                json_encode(['data' => [], 'message' => 'Unauthorized'], JSON_THROW_ON_ERROR)
+            )
+        )
+    ]);
+
+    // Create resource with mock client
+    $resource = new KickStreamResource(
+        client: new Client(['handler' => $mockHandler]),
+        accessToken: 'test_access_token'
+    );
+
+    // Create DTO
+    $updateChannelDTO = new UpdateChannelDTO(
+        categoryId: 123,
+        streamTitle: 'Updated Stream Title'
+    );
+
+    // Expect exception
+    $this->expectException(KickStreamException::class);
+    $this->expectExceptionMessage('Access denied. You may be missing the required scope');
+    
+    // Call the method
+    $resource->updateChannel($updateChannelDTO);
+});
+
+test('throws exception when channel not found during update', function () {
+    // Create mock handler with 404 Not Found response
+    $mockHandler = new MockHandler([
+        new ClientException(
+            'Not Found',
+            new Request('PATCH', 'test'),
+            new Response(
+                HttpResponse::HTTP_NOT_FOUND, 
+                [], 
+                json_encode(['data' => [], 'message' => 'Channel not found'], JSON_THROW_ON_ERROR)
+            )
+        )
+    ]);
+
+    // Create resource with mock client
+    $resource = new KickStreamResource(
+        client: new Client(['handler' => $mockHandler]),
+        accessToken: 'test_access_token'
+    );
+
+    // Create DTO
+    $updateChannelDTO = new UpdateChannelDTO(
+        categoryId: 123,
+        streamTitle: 'Updated Stream Title'
+    );
+
+    // Expect exception
+    $this->expectException(KickStreamException::class);
+    
+    // Call the method
+    $resource->updateChannel($updateChannelDTO);
 }); 
